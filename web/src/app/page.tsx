@@ -3,6 +3,7 @@
 import { Skeleton, TextArea, Button, Link } from '@radix-ui/themes';
 import { NavBar } from './components/toggle-theme';
 import { useEffect, useState } from 'react';
+import { Config } from '@/config';
 
 export default function Home() {
   const [state, setState] = useState(false);
@@ -46,7 +47,13 @@ export default function Home() {
     } else {
       setGenIsLoading(true);
       try {
-        const data = await fetch('/api/gen-logo');
+        const data = await fetch(Config.BACKEND_BASE_URL + '/api/gen-logo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: trimText }),
+        });
         const json: GenerateLogo = await data.json();
         setData(json);
       } catch (error) {
