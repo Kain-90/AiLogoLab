@@ -1,13 +1,13 @@
 'use client';
 
-import { Skeleton, TextArea, Button, Link } from '@radix-ui/themes';
+import { Tooltip, Skeleton, TextArea, Button, Link } from '@radix-ui/themes';
 import { NavBar } from './components/toggle-theme';
 import { useEffect, useState } from 'react';
 import { Config } from '@/config';
 
 export default function Home() {
   const [state, setState] = useState(false);
-  const [text, setText] = useState('');
+  const [logoDesc, setLogoDesc] = useState('');
   const [genIsLoading, setGenIsLoading] = useState(false);
   const [data, setData] = useState<GenerateLogo | null>(null);
   const navigation = [
@@ -16,6 +16,7 @@ export default function Home() {
     // { title: 'Customers', path: '#' },
     // { title: 'Pricing', path: '#' },
   ];
+  const logoDescIsEmpty = logoDesc.trim() === '';
 
   useEffect(() => {
     const handleDocumentClick = (e: MouseEvent) => {
@@ -40,7 +41,7 @@ export default function Home() {
   }, [genIsLoading]);
 
   const generateLogo = async () => {
-    const trimText = text.trim();
+    const trimText = logoDesc.trim();
     if (trimText === '') {
       alert('Please input logo description');
       return;
@@ -185,24 +186,41 @@ export default function Home() {
                 find your perfect brand logo.
               </p>
               <TextArea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={logoDesc}
+                onChange={(e) => setLogoDesc(e.target.value)}
                 resize="vertical"
                 size="3"
                 placeholder="Input logo description…"
                 radius="full"
                 className="w-full mx-auto min-h-[200px] sm:max-w-lg"
               />
-              <Button
-                className="w-full sm:w-auto"
-                onClick={generateLogo}
-                size="3"
-                variant="soft"
-                radius="large"
-                loading={genIsLoading}
-              >
-                Generate Logo
-              </Button>
+              {logoDescIsEmpty ? (
+                <Tooltip content="Please input your logo description first.">
+                  <Button
+                    className="w-full sm:w-auto shadow-lg"
+                    onClick={generateLogo}
+                    size="3"
+                    variant="classic"
+                    radius="large"
+                    loading={genIsLoading}
+                    disabled={logoDesc.trim() === ''}
+                  >
+                    Generate Logo
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Button
+                  className="w-full sm:w-auto shadow-lg"
+                  onClick={generateLogo}
+                  size="3"
+                  variant="classic"
+                  radius="large"
+                  loading={genIsLoading}
+                  disabled={logoDesc.trim() === ''}
+                >
+                  Generate Logo
+                </Button>
+              )}
               <div className="flex justify-center items-center gap-x-4 text-gray-400 text-sm">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((_, index) => (

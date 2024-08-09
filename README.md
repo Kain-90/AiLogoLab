@@ -1,4 +1,4 @@
-# IOPaint
+# AiLogoLab
 
 AiLogoLab is an all-in-one AI-powered logo creation platform that offers seamless generation, editing, and management of professional logos.
 
